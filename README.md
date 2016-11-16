@@ -7,8 +7,9 @@ The progress bar has the following look:
 [###########         ]
 
 Examples:
-    create a progress bar with 20 elements for a loop with 200 iterations 
-    and loop over the 200 iteration
+    
+create a progress bar with 20 elements for a loop with 200 iterations and 
+loop over the 200 iteration
     
     >>> progressBar = ProgressBar(20, 200)
     [                    ]
@@ -25,8 +26,8 @@ Examples:
     >>> for i in range(12): progressBar.progress(i)
     [##]
     
-    create a progress bar with 5 elements for a loop with 10 iterations 
-    check the print out after iteration 5, 7 and 10 respectively
+create a progress bar with 5 elements for a loop with 10 iterations,
+check the print out after iteration 5, 7 and 10 respectively
     
     >>> progressBar = ProgressBar(5, 10)
     [     ]
