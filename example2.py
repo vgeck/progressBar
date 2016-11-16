@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+
+# for python 2.7
+from __future__ import print_function  
+from __future__ import unicode_literals
+from builtins import range
+
 from progressBar import ProgressBar
 import multiprocessing, time
 
@@ -16,7 +22,7 @@ def foo(uselessInput):
         secsSolve: seconds needed for iterating through the for-loop
     """
     timeStart = time.clock()
-    for i in xrange(1000):
+    for i in range(1000):
         i+100*i
     time.sleep(0.2)
     timeSolverSolve = time.clock()-timeStart
@@ -42,10 +48,10 @@ nElements = 50
 nSteps = len(batchDataList)
 progressBar = ProgressBar(nElements, nSteps, subpressPrint = False)
 
-print '====================================='
-print '------Multiprocessing Batch Job------'
-print 'numberWorkers:   {}'.format(numberWorkers)
-print 'numberOfEval.:   {}'.format(len(batchDataList))
+print('=====================================')
+print('------Multiprocessing Batch Job------')
+print('numberWorkers:   {}'.format(numberWorkers))
+print('numberOfEval.:   {}'.format(len(batchDataList)))
 
 # run the batch jobs
 while (True):
@@ -56,14 +62,15 @@ while (True):
 pool.join()
 
 # print the results of all the batch simulations
-print '====================================='
+print('=====================================')
 for batchJobIndex,[minutesSolve,secsSolve] in enumerate(results):
-    print '____________Batch   {:5} ___________'.format(batchJobIndex+1) 
-    print 'Runtime:        {} min {} sec'.format(minutesSolve,secsSolve)
-print '====================================='
+    print('____________Batch   {:5} ___________'.format(batchJobIndex+1))
+    print('Runtime:        {} min {} sec'.format(minutesSolve,secsSolve))
+print('=====================================')
+
 # print the time needed for the hole process
 timeBatchJob= time.time()-timeStartBatch
 minutesBatch = int(timeBatchJob/60.)
 secsBatch = timeBatchJob-minutesBatch*60.
-print 'total runtime:  {} min {} sec'.format(minutesBatch,secsBatch)
-print '====================================='
+print('total runtime:  {} min {} sec'.format(minutesBatch,secsBatch))
+print('=====================================')
