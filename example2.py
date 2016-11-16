@@ -9,7 +9,7 @@ def foo(uselessInput):
     Function foo running a silly for loop to waste some time
     
     Args:
-	uselessInput (any): not used input, just needed for the pool map function
+    uselessInput (any): not used input, just needed for the pool map function
     
     Returns:
         minutesSolve: minutes needed for iterating through the for-loop
@@ -22,6 +22,7 @@ def foo(uselessInput):
     timeSolverSolve = time.clock()-timeStart
     minutesSolve = int(timeSolverSolve/60.)
     secsSolve = timeSolverSolve-minutesSolve*60.
+        
     return minutesSolve,secsSolve
 
 
@@ -39,7 +40,7 @@ pool.close()
 # create a loading bar 
 nElements = 50
 nSteps = len(batchDataList)
-progressBar = ProgressBar(nElements, nSteps)
+progressBar = ProgressBar(nElements, nSteps, subpressPrint = False)
 
 print '====================================='
 print '------Multiprocessing Batch Job------'
