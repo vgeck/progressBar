@@ -25,26 +25,28 @@ class ProgressBar(object):
         
         >>> for i in range(200): progressBar.progress(i)
         [###################]
+        <BLANKLINE>
         
         create a progress bar with 2 elements for a loop with 12 iterations 
         and loop over the 12 iterations
         
         >>> progressBar = ProgressBar(2, 12)
-        [# ]
+        [  ]
         >>> for i in range(12): progressBar.progress(i)
         [##]
         
-        create a progress bar with 4 elements for a loop with 10 iterations 
+        create a progress bar with 5 elements for a loop with 10 iterations 
         check the print out after iteration 5, 7 and 10 respectively
         
-        >>> progressBar = ProgressBar(4, 10)
-        [   ]
-        >>> progressBar.progress(5)
-        [#  ]
+        >>> progressBar = ProgressBar(5, 10)
+        [     ]
+        >>> progressBar.progress(2)
+        [#    ]
         >>> progressBar.progress(7)
-        [##  ]
+        [##   ]
         >>> progressBar.progress(10)
-        [####]
+        [#####]
+        <BLANKLINE>
     """
     def __init__(self, nElements, nIterations, subpressPrint = True):
         """
@@ -92,7 +94,6 @@ class ProgressBar(object):
 
         '''
         spaces = int(self.nElements-eCount+1)
-        # write empty brackets of the loading bar
         prog = ''.join([''.join(['#' for i in range(int(eCount)-1)]),''.join([' ' for i in range(spaces)])])
         loadingBar = ''.join(['[',prog,']'])
         self.stdout.write(loadingBar)
