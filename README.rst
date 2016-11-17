@@ -1,19 +1,23 @@
-# progressBar simple
+progressbar-simple
+==================
 
 Another simple progress bar to show the progress of a for loop iteration process
 in python working also for multiprocessing.
 
 The progress bar has the following look:
 
-[###########		]
+	[###########		]
 
-## Installation
+Installation
+------------
 
 Installation should be straight forward:
 
 	pip install progressbar-simple
 
-### From Source
+From Source
+~~~~~~~~~~~
+
 Alternativly, to get the most current version, the code can be installed from github as follows:
 
 	git clone git@github.com:vgeck/progressBar.git
@@ -23,7 +27,8 @@ Alternativly, to get the most current version, the code can be installed from gi
 
 The last command might need sudo prefix, depending on your python setup.
 
-## Usage:
+Usage
+-----
 
 Assume a for loop with 100 iterations calling the function foo:
 
