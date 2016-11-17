@@ -6,7 +6,7 @@ The progress bar has the following look:
 
 [###########         ]
 
-Examples:
+Usage:
     
 create a progress bar with 20 elements for a loop with 200 iterations and 
 loop over the 200 iteration
