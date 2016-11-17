@@ -7,7 +7,7 @@ from __future__ import unicode_literals
 from builtins import range
 
 import random
-from progressBar import ProgressBar
+from progressbarsimple import ProgressBar
 import time
 
 print("\nexample 1:")

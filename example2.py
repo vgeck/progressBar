@@ -7,7 +7,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from builtins import range
 
-from progressBar import ProgressBar
+from progressbarsimple import ProgressBar
 import multiprocessing, time
 
 def foo(uselessInput):
