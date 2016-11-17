@@ -27,6 +27,6 @@ setup(name='progressbar-simple',
       author_email='vinzenz@xal.no',
       license='GNU3',
       long_description=readme(),
-      install_requiers = ['future'], 
+      install_requires = ['future'], 
       packages=['progressbarsimple'],
       zip_safe=False)
