@@ -5,7 +5,7 @@ in python working also for multiprocessing.
 
 The progress bar has the following look:
 
-[###########\         ]
+[###########		]
 
 ## Installation
 
