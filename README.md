@@ -1,10 +1,27 @@
-# progressBar
+# progressBar simple
+
 Another simple progress bar to show the progress of a for loop iteration process
 in python working also for multiprocessing.
 
 The progress bar has the following look:
 
 [###########\ \ \ \ \ \ ]
+
+## Installation
+
+Installation should be straight forward:
+
+	pip install progressbar-simple
+
+### From Source
+Alternativly, to get the most current version, the code can be installed from github as follows:
+
+	git clone git@github.com:vgeck/progressBar.git
+	cd progressBar
+	pip install -r requirements.txt
+	python setupy.py install
+
+The last command might need sudo prefix, depending on your python setup.
 
 ## Usage:
 
