@@ -13,20 +13,22 @@ Assume a for loop with 100 iterations calling the function foo:
     for i in range(100):
         foo()
 
-To monitor the process of the for loop we consider a progress bar with 5 
-elements for the 100 iterations.
+To monitor the process of the for loop we consider a progress bar with 10 
+elements for the 100 iterations.\n
 The progress bar is initialized with:
     
     from progressBar import ProgressBar
+    
     progressBar = ProgressBar(nElements = 10, nIterations = 100)
     
-Now the progressBar needs to know the current status of the for loop iterator,
-within the for loop:
+The progressBar is updated within the for loop with the iterator i:
 
     progressBar.progress(i)
 
 The full code for the examples is:
 
+    from progressBar import ProgressBar
+    
     progressBar = ProgressBar(nElements = 10, nIterations = 100)
     for i in range(100):
         foo()
