@@ -6,37 +6,30 @@ The progress bar has the following look:
 
 [###########         ]
 
-Usage:
+## Usage:
+
+Assume a for loop with 100 iterations calling the function foo:
+
+    for i in range(100):
+        foo()
+
+To monitor the process of the for loop we consider a progress bar with 5 
+elements for the 100 iterations.
+The progress bar is initialized with:
     
-create a progress bar with 20 elements for a loop with 200 iterations and 
-loop over the 200 iteration
+    from progressBar import ProgressBar
+    progressBar = ProgressBar(nElements = 10, nIterations = 100)
     
-    >>> progressBar = ProgressBar(20, 200)
-    [                    ]
-    
-    >>> for i in range(200): progressBar.progress(i)
-    [###################]
-    <BLANKLINE>
-    
-    create a progress bar with 2 elements for a loop with 12 iterations 
-    and loop over the 12 iterations
-    
-    >>> progressBar = ProgressBar(2, 12)
-    [  ]
-    >>> for i in range(12): progressBar.progress(i)
-    [##]
-    
-create a progress bar with 5 elements for a loop with 10 iterations,
-check the print out after iteration 5, 7 and 10 respectively
-    
-    >>> progressBar = ProgressBar(5, 10)
-    [     ]
-    >>> progressBar.progress(2)
-    [#    ]
-    >>> progressBar.progress(7)
-    [##   ]
-    >>> progressBar.progress(10)
-    [#####]
-    <BLANKLINE>
+Now the progressBar needs to know the current status of the for loop iterator,
+within the for loop:
+
+    progressBar.progress(i)
+
+The full code for the examples is:
+
+    progressBar = ProgressBar(nElements = 10, nIterations = 100)
+    for i in range(100):
+        foo()
+        progressBar.progress(i)
     
 For more information on how to use the progress bar see the 2 example files.
