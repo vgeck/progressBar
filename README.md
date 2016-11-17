@@ -34,21 +34,21 @@ To monitor the process of the for loop we consider a progress bar with 10
 elements for the 100 iterations.\n
 The progress bar is initialized with:
     
-    from progressBar import ProgressBar
+    from progressbarsimple import ProgressBar
     
-    progressBar = ProgressBar(nElements = 10, nIterations = 100)
+    myProgressBar = ProgressBar(nElements = 10, nIterations = 100)
     
 The progressBar is updated within the for loop with the iterator i:
 
-    progressBar.progress(i)
+    myProgressBar.progress(i)
 
 The full code for the examples is:
 
-    from progressBar import ProgressBar
+    from progressbarsimple import ProgressBar
     
-    progressBar = ProgressBar(nElements = 10, nIterations = 100)
+    myProgressBar = ProgressBar(nElements = 10, nIterations = 100)
     for i in range(100):
         foo()
-        progressBar.progress(i)
+        myProgressBar.progress(i)
     
-For more information on how to use the progress bar see the 2 example files.
+For more information on how to use the progressbarsimple see the 2 example files.
