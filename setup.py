@@ -29,4 +29,5 @@ setup(name='progressbar-simple',
       long_description=readme(),
       install_requires = ['future'], 
       packages=['progressbarsimple'],
+      tests_require=["pytest-runner", "pytest-pylint"],
       zip_safe=False)
