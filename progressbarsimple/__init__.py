@@ -1,5 +1,28 @@
-#!/usr/bin/env python
-# encoding: utf-8
+"""
+Another simple progress bar
+
+progress bar to show the progress of a loop iteration process in python
+working also for multiprocessing with the following look:
+
+    [###########         ]
+
+Examples:
+
+    a simple progress bar showing the progress of a silly 'for'-loop
+    without suppressing the print inside the 'for'-loop out::
+
+    progressBar = ProgressBar(nElements=2, nIterations=2, suppressPrint=False)
+    progressBar.showEmptyBar()
+    print("This message will be shown right away")
+
+    for i in range(2):
+         # as the printout is not suppressed the printout is shown right away
+         # and the progress bar is moved down
+         print("eval {}".format(i))
+         # tell the progress bar that the next iteration was done
+         progressBar.progress()
+"""
+# *.* encoding: utf-8
 
 import sys
 import io
@@ -7,166 +30,166 @@ import io
 #for python 2.7
 from builtins import range
 
+
+def progressBarStringGenerator(nElements):
+    u'''
+    Create progress bar with eCount #-elements
+
+    Args:
+        eCount (int): number of #-elements to write
+
+    Yields:
+        str: the progress bar with next amount of #-elements
+
+    Examples:
+        genearte a progressBarStringGenerator for 2 elements, and
+        progress it through
+        >>> pBSG = progressBarStringGenerator(2)
+        >>> next(pBSG)
+        '[  ]'
+        >>> next(pBSG)
+        '[# ]'
+        >>> next(pBSG)
+        '[##]'
+    '''
+    eCount = 0
+    while eCount < nElements + 1:
+        yield "[{}]".format(("#"*int(eCount)).ljust(nElements))
+        eCount += 1
+
+def progressBarGenerator(nElements,
+                         nIterations,
+                         outputBuffer,
+                         stdoutHandle,
+                         suppressPrint):
+    u"""
+    Progress bar generator function.
+
+    Args:
+        nElements (int): number of progress bar #-elements
+        nIterations (int): number of loop-iterations
+        outputBuffer (StringIO): StringIO file instance in which sys.stdout
+        was redirected
+        stdoutHandle (sys.stdout): local handle of sys.stdout
+        suppressPrint (bool): show print outs of loop-function after or while
+        looping.
+
+    Examples:
+        generate a progressBarGenerator for 2 elements, and
+        check all iterations
+        >>> pBG = progressBarGenerator(2,2,io.StringIO(),sys.stdout,False)
+        >>> next(pBG)
+        '\\x08 \\x08\\x08 \\x08\\x08 \\x08\\x08 \\x08[  ]'
+        >>> print('suppressPrint is False')
+        suppressPrint is False
+        >>> next(pBG)
+        '\\x08 \\x08\\x08 \\x08\\x08 \\x08\\x08 \\x08[# ]'
+        >>> next(pBG)
+        '\\x08 \\x08\\x08 \\x08\\x08 \\x08\\x08 \\x08[##]\\n\\n'
+    """
+    currentIteration = 0.
+    eCount = 0.
+    localProgressBarStringGenerator = progressBarStringGenerator(nElements)
+    nIterations = nIterations + 1
+    while currentIteration < nIterations:
+        progressBarOutputString = ""
+        # completed tasks of the process in percent
+        loopPercentage = currentIteration / (nIterations - 1)
+        # completed shown progress in percent
+        barPercentage = eCount / nElements
+        while barPercentage <= loopPercentage:
+            progressBarOutputString += '\b \b' * (nElements + 2)
+            if suppressPrint is False:
+                progressBarOutputString += outputBuffer.getvalue()
+                outputBuffer.truncate(0)
+            progressBarOutputString += next(localProgressBarStringGenerator)
+            eCount += 1.
+            barPercentage = eCount / nElements
+
+        if loopPercentage >= 1.:
+            progressBarOutputString += ("\n" + outputBuffer.getvalue() + "\n")
+            # redirect stdout
+            sys.stdout = stdoutHandle
+            # close outputBuffer
+            outputBuffer.close()
+
+        yield progressBarOutputString
+        currentIteration += 1
+
 class ProgressBar(object):
     """
-    progress bar to show the progress of a for loop iteration process in python
-    working also for multiprocessing
-    
-    with the following look:
-    
+    progress bar to show the progress of a loop iteration process in python
+    working also for multiprocessing with the following look:
+
     [###########         ]
-    
-    Examples:
-    
-        create a progress bar with 20 elements for a loop with 200 iterations 
-        and loop over the 200 iteration
-        
-        >>> progressBar = ProgressBar(20, 200)
-        [                    ]
-        
-        >>> for i in range(200): progressBar.progress(i)
-         \b\b \b\b \b\b \b\b \b\b \b\b \b\b \b\b \b\b \b\b \b\b \b\b \b\b \b\b \b\b \b\b \b\b \b\b \b\b \b\b \b\b \b\b[####################]
-        <BLANKLINE>
-        
-        create a progress bar with 2 elements for a loop with 12 iterations 
-        and loop over the 12 iterations
-        
-        >>> progressBar = ProgressBar(2, 12)
-        [  ]
-        
-        >>> for i in range(12): progressBar.progress(i)
-         \b\b \b\b \b\b \b\b[# ] \b\b \b\b \b\b \b\b[##]
-        <BLANKLINE>
-        
-        create a progress bar with 5 elements for a loop with 10 iterations 
-        check the print out after iteration 5, 7 and 10 respectively
-        
-        >>> progressBar = ProgressBar(5, 10)
-        [     ]
-        >>> progressBar.progress(2)
-         \b\b \b\b \b\b \b\b \b\b \b\b \b\b[#    ] 
-        >>> progressBar.progress(7)
-         \b\b \b\b \b\b \b\b \b\b \b\b \b\b[###  ]
-        >>> progressBar.progress(10)
-         \b\b \b\b \b\b \b\b \b\b \b\b \b\b[#####] 
-        <BLANKLINE>
-        
-        create a progress bar with 5 elements for a loop with 10 iterations 
-        check the print out after iteration 5, 7 and 10 respectively
-        
-        >>> progressBar = ProgressBar(5, 10)
-        [     ]
-        >>> progressBar.clearScreen(5)
-         \b\b \b\b \b\b \b\b \b\b
-        >>> progressBar.writeProgress(2)
-        [##   ]
-          
+
     """
-    def __init__(self, nElements, nIterations, subpressPrint = True):
+    def __init__(self, nElements, nIterations, suppressPrint=True):
         """
-        Initialization of the the progress bar, prints out the brackets of 
+        Initialization of the the progress bar, prints out the brackets of
         the progress bar immediately
-        
-        All outputs to stdout will be captured and displayed after the 
+
+        All outputs to stdout will be captured and displayed after the
         progress bar is fully loaded.
 
         Args:
             nElements (int): number of elements of the progress bar
-            nIterations (int): number of iterations of the process which 
+            nIterations (int): number of iterations of the process which
             progress should be displayed
-            subpressPrint (bool): subpress print out statements of function
+            suppressPrint (bool): subpress print out statements of function
             in the function which is looped
         """
-        
-        self.subpressPrint = subpressPrint
         # handle for stdout
         self.stdout = sys.stdout
         # buffer for stdout outputs
-        self.outputBuffer = io.StringIO()
+        outputBuffer = io.StringIO()
         # redirect system stdout to buffer
-        sys.stdout = self.outputBuffer
-        
-        self.finished = False
-        
-        self.nElements = nElements
-        self.nIterations = float(nIterations)
-        self.eCount = 0.
+        sys.stdout = outputBuffer
 
-        self.writeProgress(self.eCount)
-        
+        self.currentIterationMultiprocessing = 0
+        self.emptyShowed = False
 
-    def clearScreen(self, dCount):
+        self.progressBarGenerator = progressBarGenerator(nElements,
+                                                         float(nIterations),
+                                                         outputBuffer,
+                                                         self.stdout,
+                                                         suppressPrint)
+
+    def showEmptyBar(self):
         """
-        Clear the screen by writing ' \b\b' dCount times to stdout
-        
-        Args:
-            dCount (int): number of elements to backspace
+        shows the empty progress bar
+        if not called by the user, it is done automatically
         """
-        # write backspaces to the start of the loading bar
-        backspacing = ''.join([' \b\b' for i in range(dCount)])
-        self.stdout.write(backspacing)
-        self.stdout.flush()
+        self.emptyShowed = True
+        self.progress()
 
-
-    def writeProgress(self, eCount):
-        '''
-        Writes the progress bar with eCount #-elements to stdout
-        
-        Args:
-            eCount (int): number of #-elements to write
-        '''
-        if eCount > self.nElements: eCount = self.nElements
-        spaces = int(self.nElements-eCount)
-        prog = ''.join([''.join(['#' for i in range(int(eCount))]),\
-                        ''.join([' ' for i in range(spaces)])])
-        loadingBar = ''.join(['[',prog,']'])
-        self.stdout.write(loadingBar)
-        self.stdout.flush()
-        
-
-    def progress(self, currentIteration):
+    def progress(self):
         """
-        checks the progress of the adjoin process, and advances the progress 
+        checks the progress of the adjoin process, and advances the progress
         bar # if necessary
-        
-        Args:
-            currentIteration (int): number of the current iterations of the 
-            adjoin process
         """
-        if self.finished == False:
+        if self.emptyShowed is False: self.showEmptyBar()
+        progressBar = next(self.progressBarGenerator)
+        self.stdout.write(progressBar)
+        self.stdout.flush()
 
-            # completed tasks of the process in percent
-            loopPercentage = currentIteration/(self.nIterations-1.) 
-            # completed shown progress in percent
-            barPercentage = self.eCount/self.nElements
-            
-            while (barPercentage <= loopPercentage):
-                
-                self.clearScreen(self.nElements+2)
+    def progressMultiprocessing(self, iterationStatus):
+        """
+        checks the progress of the adjoin process, and advances the progress
+        bar # if necessary
 
-                if self.subpressPrint == False:
-                    toPrint = self.outputBuffer.getvalue()
-                    self.stdout.write(toPrint)                
-                    self.stdout.flush()
-                    self.outputBuffer.truncate(0)
+        Args:
+            iterationStatus (int): index of the current iteration in the extern loop
+        """
+        if iterationStatus != self.currentIterationMultiprocessing:
 
-                self.writeProgress(self.eCount)
-                self.eCount += 1.
-                barPercentage = self.eCount/self.nElements
-            
-            if loopPercentage >= 1.:
-                
-                self.stdout.write("\n")
-                self.stdout.flush()
-                sys.stdout = self.stdout
-                sys.stdout.write(self.outputBuffer.getvalue())
-                sys.stdout.write("\n")
-                self.outputBuffer.close() 
-                self.finished = True
-        
-        
+            while iterationStatus - self.currentIterationMultiprocessing > 0:
+                progressBar = next(self.progressBarGenerator)
+                self.currentIterationMultiprocessing += 1
+
+            self.stdout.write(progressBar)
+            self.stdout.flush()
+
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
-    
-        
