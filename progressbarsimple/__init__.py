@@ -1,3 +1,4 @@
+# encoding: utf-8
 """
 Another simple progress bar
 
@@ -22,7 +23,6 @@ Examples:
          # tell the progress bar that the next iteration was done
          progressBar.progress()
 """
-# *.* encoding: utf-8
 
 import sys
 import io
@@ -32,7 +32,7 @@ from builtins import range
 
 
 def progressBarStringGenerator(nElements):
-    u'''
+    '''
     Create progress bar with eCount #-elements
 
     Args:
@@ -62,7 +62,7 @@ def progressBarGenerator(nElements,
                          outputBuffer,
                          stdoutHandle,
                          suppressPrint):
-    u"""
+    """
     Progress bar generator function.
 
     Args:
@@ -78,14 +78,14 @@ def progressBarGenerator(nElements,
         generate a progressBarGenerator for 2 elements, and
         check all iterations
         >>> pBG = progressBarGenerator(2,2,io.StringIO(),sys.stdout,False)
-        >>> next(pBG)
-        '\\x08 \\x08\\x08 \\x08\\x08 \\x08\\x08 \\x08[  ]'
+        >>> next(pBG) == u'\\x08 \\x08\\x08 \\x08\\x08 \\x08\\x08 \\x08[  ]'
+        True
         >>> print('suppressPrint is False')
         suppressPrint is False
-        >>> next(pBG)
-        '\\x08 \\x08\\x08 \\x08\\x08 \\x08\\x08 \\x08[# ]'
-        >>> next(pBG)
-        '\\x08 \\x08\\x08 \\x08\\x08 \\x08\\x08 \\x08[##]\\n\\n'
+        >>> next(pBG) == u'\\x08 \\x08\\x08 \\x08\\x08 \\x08\\x08 \\x08[# ]'
+        True
+        >>> next(pBG) == u'\\x08 \\x08\\x08 \\x08\\x08 \\x08\\x08 \\x08[##]\\n\\n'
+        True
     """
     currentIteration = 0.
     eCount = 0.
