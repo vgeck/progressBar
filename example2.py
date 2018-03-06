@@ -10,6 +10,7 @@ from builtins import range
 from progressbarsimple import ProgressBar
 import multiprocessing, time
 
+
 def foo(uselessInput):
     """
     Function foo running a silly for loop to waste some time
@@ -55,10 +56,11 @@ print('numberOfEval.:   {}'.format(len(batchDataList)))
 
 # run the batch jobs
 completed = 0
-while completed < nSteps:
+while completed <= nSteps:
+    progressBar.progressMultiprocessing(results._index)
     if completed < results._index:
         completed = results._index
-    progressBar.progressMultiprocessing(results._index)
+
 
 pool.join()
 

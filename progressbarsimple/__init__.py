@@ -42,7 +42,7 @@ def progressBarStringGenerator(nElements):
         str: the progress bar with next amount of #-elements
 
     Examples:
-        genearte a progressBarStringGenerator for 2 elements, and
+        generate a progressBarStringGenerator for 2 elements, and
         progress it through
         >>> pBSG = progressBarStringGenerator(2)
         >>> next(pBSG)
@@ -56,6 +56,7 @@ def progressBarStringGenerator(nElements):
     while eCount < nElements + 1:
         yield "[{}]".format(("#"*int(eCount)).ljust(nElements))
         eCount += 1
+
 
 def progressBarGenerator(nElements,
                          nIterations,
@@ -116,6 +117,7 @@ def progressBarGenerator(nElements,
         yield progressBarOutputString
         currentIteration += 1
 
+
 class ProgressBar(object):
     """
     progress bar to show the progress of a loop iteration process in python
@@ -150,7 +152,7 @@ class ProgressBar(object):
         self.emptyShowed = False
 
         self.progressBarGenerator = progressBarGenerator(nElements,
-                                                         float(nIterations),
+                                                         int(nIterations),
                                                          outputBuffer,
                                                          self.stdout,
                                                          suppressPrint)
@@ -168,7 +170,8 @@ class ProgressBar(object):
         checks the progress of the adjoin process, and advances the progress
         bar # if necessary
         """
-        if self.emptyShowed is False: self.showEmptyBar()
+        if self.emptyShowed is False:
+            self.showEmptyBar()
         progressBar = next(self.progressBarGenerator)
         self.stdout.write(progressBar)
         self.stdout.flush()
@@ -189,6 +192,7 @@ class ProgressBar(object):
 
             self.stdout.write(progressBar)
             self.stdout.flush()
+
 
 if __name__ == '__main__':
     import doctest
